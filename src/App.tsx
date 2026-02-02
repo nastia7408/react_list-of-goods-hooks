@@ -17,16 +17,20 @@ export const goodsFromServer: string[] = [
   'Garlic',
 ];
 
-type SortBy = 'alphabet' | 'length' | '';
+enum SortType {
+  None = '',
+  Alphabet = 'alphabet',
+  Length = 'length',
+}
 
 export const App: React.FC = () => {
-  const [sortGoods, setSortGoods] = useState<SortBy>('');
+  const [sortGoods, setSortGoods] = useState<SortType>(SortType.None);
   const [isReversed, setIsReversed] = useState(false);
   const visibleGoods = [...goodsFromServer];
 
-  if (sortGoods === 'alphabet') {
+  if (sortGoods === SortType.Alphabet) {
     visibleGoods.sort((a, b) => a.localeCompare(b));
-  } else if (sortGoods === 'length') {
+  } else if (sortGoods === SortType.Length) {
     visibleGoods.sort((a, b) => a.length - b.length);
   }
 
@@ -40,9 +44,9 @@ export const App: React.FC = () => {
         <button
           type="button"
           className={classNames('button is-info', {
-            'is-light': sortGoods !== 'alphabet',
+            'is-light': sortGoods !== SortType.Alphabet,
           })}
-          onClick={() => setSortGoods('alphabet')}
+          onClick={() => setSortGoods(SortType.Alphabet)}
         >
           Sort alphabetically
         </button>
@@ -50,9 +54,9 @@ export const App: React.FC = () => {
         <button
           type="button"
           className={classNames('button is-success', {
-            'is-light': sortGoods !== 'length',
+            'is-light': sortGoods !== SortType.Length,
           })}
-          onClick={() => setSortGoods('length')}
+          onClick={() => setSortGoods(SortType.Length)}
         >
           Sort by length
         </button>
@@ -71,7 +75,7 @@ export const App: React.FC = () => {
             type="button"
             className="button is-danger"
             onClick={() => {
-              setSortGoods('');
+              setSortGoods(SortType.None);
               setIsReversed(false);
             }}
           >
